@@ -12,8 +12,8 @@ import {
 } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import AuthLayout from "~/components/AuthLayout";
-import { authSchema } from "~/common/validations/auth";
-import { z } from "zod";
+import { signinSchema } from "~/common/validations/auth";
+import type { z } from "zod";
 
 function SigninForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +24,7 @@ function SigninForm() {
     formState: { errors, isSubmitting },
     setFocus,
   } = useForm({
-    resolver: zodResolver(authSchema),
+    resolver: zodResolver(signinSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -35,7 +35,7 @@ function SigninForm() {
     setFocus("email");
   }, [setFocus]);
 
-  async function handleSigninSubmit(data: z.infer<typeof authSchema>) {
+  async function handleSigninSubmit(data: z.infer<typeof signinSchema>) {
     try {
       await signIn("credentials", {
         ...data,

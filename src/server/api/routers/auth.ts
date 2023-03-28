@@ -1,11 +1,11 @@
 import { TRPCError } from "@trpc/server";
-import { authSchema } from "~/common/validations/auth";
+import { signupSchema } from "~/common/validations/auth";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
 import bcryptjs from "bcryptjs";
 
 export const authRouter = createTRPCRouter({
-  signup: publicProcedure.input(authSchema).mutation(async ({ input }) => {
+  signup: publicProcedure.input(signupSchema).mutation(async ({ input }) => {
     const user = await prisma.user.findUnique({
       where: { email: input.email },
     });
@@ -19,6 +19,7 @@ export const authRouter = createTRPCRouter({
     try {
       await prisma.user.create({
         data: {
+          name: input.name,
           email: input.email,
           password: {
             create: {

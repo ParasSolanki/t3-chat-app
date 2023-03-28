@@ -10,7 +10,7 @@ import {
   LockClosedIcon,
 } from "@heroicons/react/24/solid";
 import AuthLayout from "~/components/AuthLayout";
-import { authSchema } from "~/common/validations/auth";
+import { signupSchema } from "~/common/validations/auth";
 import { api } from "~/utils/api";
 import { signIn } from "next-auth/react";
 import type { z } from "zod";
@@ -23,20 +23,21 @@ function SignupForm() {
     formState: { errors, isSubmitting },
     setFocus,
   } = useForm({
-    resolver: zodResolver(authSchema),
+    resolver: zodResolver(signupSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
   const { mutateAsync } = api.auth.signup.useMutation();
 
-  async function handleSigninSubmit(data: z.infer<typeof authSchema>) {
+  async function handleSigninSubmit(data: z.infer<typeof signupSchema>) {
     try {
       const { ok } = await mutateAsync(data);
 
       if (ok) {
-        await signIn("credentials", { ...data, callbackUrl: "/new-user" });
+        await signIn("credentials", { ...data, callbackUrl: "/" });
       }
     } catch (error) {
       console.log(error);
@@ -44,7 +45,7 @@ function SignupForm() {
   }
 
   useEffect(() => {
-    setFocus("email");
+    setFocus("name");
   }, [setFocus]);
 
   return (
@@ -56,6 +57,26 @@ function SignupForm() {
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onSubmit={handleSubmit(handleSigninSubmit)}
       >
+        <div>
+          <label htmlFor="name" className="font-medium text-gray-300">
+            Name
+          </label>
+          <input
+            id="name"
+            type="text"
+            className={clsx(
+              "mt-1 block w-full rounded-md border-2 border-neutral-700 bg-neutral-900 py-2 px-3 text-base text-slate-200 shadow-sm focus:bg-neutral-800/90 focus:outline-none focus:ring-0",
+              {
+                "focus-within:border-red-500": errors?.name?.message,
+                "focus-within:border-orange-400": !errors?.name,
+              }
+            )}
+            {...register("name")}
+          />
+          {errors?.name?.message ? (
+            <small className="text-red-500">{errors.name.message}</small>
+          ) : null}
+        </div>
         <div>
           <label htmlFor="email" className="font-medium text-gray-300">
             Email
