@@ -2,7 +2,7 @@ const AuthLayout: React.FunctionComponent<{ children: React.ReactNode }> = ({
   children,
 }) => {
   return (
-    <main className="relative isolate flex h-screen items-center">
+    <div className="relative isolate flex h-screen items-center">
       <div className="grid-border-image -z-1 absolute inset-0 border-b border-slate-300 bg-bottom"></div>
       <div className="fixed top-0 left-0 -z-10 h-full w-full" tabIndex={-1}>
         <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
@@ -33,7 +33,7 @@ const AuthLayout: React.FunctionComponent<{ children: React.ReactNode }> = ({
       </div>
 
       {children}
-    </main>
+    </div>
   );
 };
 
