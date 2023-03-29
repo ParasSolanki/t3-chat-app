@@ -8,6 +8,6 @@ body {
 
 .grid-border-image {
   background-image: url("../assets/border.svg");
-  mask-image: linear-gradient(0deg, red, #000000, yellow);
-  -webkit-mask-image: linear-gradient(0deg, red, #000000, yellow);
+  mask-image: linear-gradient(0deg, red, rgb(15, 23, 42), yellow);
+  -webkit-mask-image: linear-gradient(0deg, red, rgb(15, 23, 42), yellow);
 }

@@ -9,7 +9,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "~/server/db";
 import { env } from "~/env.mjs";
-import { authSchema } from "~/common/validations/auth";
+import { signinSchema } from "~/common/validations/auth";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -84,14 +84,14 @@ export const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
-        const result = authSchema.safeParse(credentials);
+        const input = signinSchema.safeParse(credentials);
 
-        if (!result.success) return null;
+        if (!input.success) return null;
 
         try {
           const user = await prisma.user.findFirst({
             where: {
-              email: result.data.email,
+              email: input.data.email,
             },
             include: {
               password: true,
@@ -102,7 +102,7 @@ export const authOptions: NextAuthOptions = {
           if (!user.password) return null;
 
           const isMatch = await bcryptjs.compare(
-            result.data.password,
+            input.data.password,
             user.password.hash
           );
 
