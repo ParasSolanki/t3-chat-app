@@ -3,11 +3,17 @@ import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import Router from "next/router";
 import NProgress from "nprogress";
+import { Inter } from "next/font/google";
 
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import "~/styles/nprogress.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
@@ -19,7 +25,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <main className={`${inter.variable} font-inter`}>
+        <Component {...pageProps} />
+      </main>
     </SessionProvider>
   );
 };
