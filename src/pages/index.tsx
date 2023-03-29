@@ -7,11 +7,20 @@ import { api } from "~/utils/api";
 
 function User() {
   const { data } = useSession();
+  const splitedName = data?.user.name?.split(" ");
+
+  const firstInitial =
+    splitedName !== undefined && splitedName[0] ? splitedName[0].charAt(0) : "";
+  const secondInitial =
+    splitedName !== undefined && splitedName[1] ? splitedName[1].charAt(0) : "";
+
   return (
     <div className="flex items-center justify-between space-x-3 bg-black/70 p-4 shadow-md">
       <div className="flex items-center space-x-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-zinc-700">
-          <strong>{data?.user.name?.charAt(0)}</strong>
+        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-zinc-700 ">
+          <strong className="text-sm uppercase tracking-widest">
+            {`${firstInitial}${secondInitial}`}
+          </strong>
         </div>
         <strong className="growo-1 text-base">{data?.user.name}</strong>
       </div>
