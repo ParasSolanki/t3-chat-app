@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 
 import { signOut, useSession } from "next-auth/react";
-import { LogOut } from "lucide-react";
+import { LogOut, User as UserIcon } from "lucide-react";
 import * as DropdownMenu from "~/components/ui/DropdownMenu";
 
 function User() {
@@ -16,24 +16,40 @@ function User() {
 
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-700">
+      <DropdownMenu.Trigger className="focus focus:ring-offset-zinc-950 flex h-7 w-7 items-center justify-center rounded-md bg-zinc-700 outline-none focus:ring-2 focus:ring-zinc-700 focus:ring-offset-2">
         <strong className="text-xs uppercase tracking-widest">
           {`${firstInitial}${secondInitial}`}
         </strong>
       </DropdownMenu.Trigger>
 
-      <DropdownMenu.Content className="w-48 rounded-md p-3">
-        <DropdownMenu.Item className="rounded-md p-2">
+      <DropdownMenu.Content align="end" className="w-48 rounded-md p-3">
+        <div className="mb-3 flex items-start space-x-2">
+          <div className="flex h-10 w-10 items-center justify-center rounded-md bg-zinc-700">
+            <strong className="text-sm uppercase tracking-widest">
+              {`${firstInitial}${secondInitial}`}
+            </strong>
+          </div>
+          <div className="grow-1 leading-tight">
+            <p className="text-sm font-semibold text-white">
+              {data?.user.name}
+            </p>
+            <span className="text-xs text-zinc-400">
+              @{data?.user.username}
+            </span>
+          </div>
+        </div>
+        <DropdownMenu.Item className="inline-flex w-full cursor-pointer items-center rounded-md p-2">
+          <UserIcon className="mr-2 h-4 w-4" />
           Profile
         </DropdownMenu.Item>
-        <DropdownMenu.Separator />
+        <DropdownMenu.Separator className="my-1.5" />
         <DropdownMenu.Item asChild className="rounded-md p-2">
           <button
             type="button"
             className="inline-flex w-full cursor-pointer items-center text-red-500"
             onClick={() => void signOut()}
           >
-            <LogOut className="mr-2 h-5 w-5" />
+            <LogOut className="mr-2 h-4 w-4" />
             Logout
           </button>
         </DropdownMenu.Item>
