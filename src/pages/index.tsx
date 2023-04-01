@@ -1,7 +1,9 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { LogOut } from "lucide-react";
+import * as DropdownMenu from "~/components/ui/DropdownMenu";
 
 function User() {
   const { data } = useSession();
@@ -13,11 +15,30 @@ function User() {
     splitedName !== undefined && splitedName[1] ? splitedName[1].charAt(0) : "";
 
   return (
-    <div className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-700">
-      <strong className="text-xs uppercase tracking-widest">
-        {`${firstInitial}${secondInitial}`}
-      </strong>
-    </div>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-700">
+        <strong className="text-xs uppercase tracking-widest">
+          {`${firstInitial}${secondInitial}`}
+        </strong>
+      </DropdownMenu.Trigger>
+
+      <DropdownMenu.Content className="w-48 rounded-md p-3">
+        <DropdownMenu.Item className="rounded-md p-2">
+          Profile
+        </DropdownMenu.Item>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item asChild className="rounded-md p-2">
+          <button
+            type="button"
+            className="inline-flex w-full cursor-pointer items-center text-red-500"
+            onClick={() => void signOut()}
+          >
+            <LogOut className="mr-2 h-5 w-5" />
+            Logout
+          </button>
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 }
 

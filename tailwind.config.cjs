@@ -11,7 +11,11 @@ const config = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [
+    require("@tailwindcss/forms"),
+    // @ts-ignore
+    require("tailwindcss-animate"),
+  ],
 };
 
 module.exports = config;
