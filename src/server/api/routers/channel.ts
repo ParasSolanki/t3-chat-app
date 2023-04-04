@@ -3,6 +3,15 @@ import { createChannelSchema } from "~/common/validations/channel";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const channelRouter = createTRPCRouter({
+  getAll: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.channel.findMany({
+      where: {
+        members: {
+          some: { userId: ctx.session.user.id },
+        },
+      },
+    });
+  }),
   create: protectedProcedure
     .input(createChannelSchema)
     .mutation(async ({ input, ctx }) => {

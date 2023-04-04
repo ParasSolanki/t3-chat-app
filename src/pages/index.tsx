@@ -2,8 +2,9 @@ import { type NextPage } from "next";
 import Head from "next/head";
 
 import { signOut, useSession } from "next-auth/react";
-import { LogOut, User as UserIcon } from "lucide-react";
+import { LogOut, User as UserIcon, PlusIcon } from "lucide-react";
 import * as DropdownMenu from "~/components/ui/DropdownMenu";
+import { api } from "~/utils/api";
 
 function User() {
   const { data } = useSession();
@@ -16,7 +17,7 @@ function User() {
 
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger className="focus focus:ring-offset-zinc-950 flex h-7 w-7 items-center justify-center rounded-md bg-zinc-700 outline-none focus:ring-2 focus:ring-zinc-700 focus:ring-offset-2">
+      <DropdownMenu.Trigger className="focus flex h-7 w-7 items-center justify-center rounded-md bg-zinc-700 outline-none focus:ring-2 focus:ring-zinc-700 focus:ring-offset-2 focus:ring-offset-zinc-950">
         <strong className="text-xs uppercase tracking-widest">
           {`${firstInitial}${secondInitial}`}
         </strong>
@@ -60,33 +61,44 @@ function User() {
 
 function Header() {
   return (
-    <header className="bg-zinc-950/70 sticky inset-x-0 top-0 z-30 flex h-11 items-center justify-between py-1.5 px-2">
+    <header className="sticky inset-x-0 top-0 z-30 flex h-11 items-center justify-between bg-zinc-950/70 px-2 py-1.5">
       <div className=""></div>
       <User />
     </header>
   );
 }
 
+function ChannelsList() {
+  const { isLoading, data: channels } = api.channel.getAll.useQuery();
+
+  return (
+    <div className="px-4">
+      <div className="flex justify-between">
+        <strong className="text-lg">Channels</strong>
+        <button
+          type="button"
+          className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-700 shadow-md outline-none hover:bg-zinc-600 focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-zinc-800"
+        >
+          <PlusIcon className="h-4 w-4" />
+        </button>
+      </div>
+      {isLoading && <p>Loading..</p>}
+      {!isLoading && !!channels?.length && (
+        <ul>
+          {channels.map((channel) => (
+            <li key={channel.id}>{channel.name}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 function Sidebar() {
   return (
-    <aside className="sticky top-11 left-0 z-20 flex h-full max-h-full flex-col justify-between overflow-y-auto bg-zinc-800">
+    <aside className="sticky left-0 top-11 z-20 flex h-full max-h-full flex-col justify-between overflow-y-auto bg-zinc-800">
       <div className="py-3">
-        <div className="flex justify-between px-4">
-          <strong className="text-lg">Channels</strong>
-          <button
-            type="button"
-            className="flex h-8 w-8 items-center justify-center rounded-md bg-zinc-700 shadow"
-          >
-            +
-          </button>
-        </div>
-
-        <p className="my-80">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
-          asperiores in nemo velit perspiciatis culpa blanditiis consequatur
-          nobis porro officia? Quo consequuntur ullam fugiat natus dolor quos
-          facilis cum exercitationem.
-        </p>
+        <ChannelsList />
       </div>
     </aside>
   );
