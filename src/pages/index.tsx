@@ -4,7 +4,9 @@ import Head from "next/head";
 import { signOut, useSession } from "next-auth/react";
 import { LogOut, User as UserIcon, PlusIcon } from "lucide-react";
 import * as DropdownMenu from "~/components/ui/DropdownMenu";
+import * as Dialog from "~/components/ui/Dialog";
 import { api } from "~/utils/api";
+import { DialogContent } from "@radix-ui/react-dialog";
 
 function User() {
   const { data } = useSession();
@@ -68,6 +70,21 @@ function Header() {
   );
 }
 
+function CreateChannelDialog() {
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-700 shadow-md outline-none hover:bg-zinc-600 focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-zinc-800">
+        <PlusIcon className="h-4 w-4" />
+      </Dialog.Trigger>
+      <Dialog.Content>
+        <Dialog.Header className="text-2xl font-semibold">
+          Create Channel
+        </Dialog.Header>
+      </Dialog.Content>
+    </Dialog.Root>
+  );
+}
+
 function ChannelsList() {
   const { isLoading, data: channels } = api.channel.getAll.useQuery();
 
@@ -75,12 +92,7 @@ function ChannelsList() {
     <div className="px-4">
       <div className="flex justify-between">
         <strong className="text-lg">Channels</strong>
-        <button
-          type="button"
-          className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-700 shadow-md outline-none hover:bg-zinc-600 focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-zinc-800"
-        >
-          <PlusIcon className="h-4 w-4" />
-        </button>
+        <CreateChannelDialog />
       </div>
       {isLoading && <p>Loading..</p>}
       {!isLoading && !!channels?.length && (
