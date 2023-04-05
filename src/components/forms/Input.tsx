@@ -13,7 +13,6 @@ const Input = forwardRef<HTMLInputElement, Props>(
     const form = useFormContext();
     const state = form.getFieldState(props.name, form.formState);
 
-    console.log(form);
     return (
       <div>
         <label htmlFor={id} className="font-medium text-zinc-300">

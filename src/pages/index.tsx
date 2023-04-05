@@ -1,8 +1,9 @@
 import { type NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 
 import { signOut, useSession } from "next-auth/react";
-import { LogOut, User as UserIcon, PlusIcon } from "lucide-react";
+import { LogOut, User as UserIcon, PlusIcon, InfoIcon } from "lucide-react";
 import * as DropdownMenu from "~/components/ui/DropdownMenu";
 import * as Dialog from "~/components/ui/Dialog";
 import Form from "~/components/forms/Form";
@@ -11,9 +12,7 @@ import SubmitButton from "~/components/forms/SubmitButton";
 import useZodForm from "~/hooks/use-zod-form";
 import { api } from "~/utils/api";
 import { createChannelSchema } from "~/common/validations/channel";
-import type { z } from "zod";
 import { useState } from "react";
-import Link from "next/link";
 
 function User() {
   const { data } = useSession();
@@ -77,10 +76,28 @@ function Header() {
   );
 }
 
-function CreateChannelForm({ onSuccess }: { onSuccess: () => void }) {
+function DangerAlert({ message }: { message: string }) {
+  return (
+    <div
+      className="mb-4 flex items-center rounded-lg border border-red-500 bg-red-500/50 p-4 text-sm text-red-50 dark:border-red-800 dark:bg-gray-800 dark:text-red-400"
+      role="alert"
+    >
+      <InfoIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+      <span className="sr-only">Info</span>
+      <p className="font-medium">{message}</p>
+    </div>
+  );
+}
+
+function CreateChannelForm(props: { onSuccess: () => void }) {
   const utils = api.useContext();
-  const { mutateAsync } = api.channel.create.useMutation({
+  const [message, setMessage] = useState("");
+  const { mutate, isError } = api.channel.create.useMutation({
+    onError({ message }) {
+      setMessage(message);
+    },
     async onSuccess() {
+      props.onSuccess();
       await utils.channel.getAll.invalidate();
     },
   });
@@ -92,13 +109,9 @@ function CreateChannelForm({ onSuccess }: { onSuccess: () => void }) {
     },
   });
 
-  async function handleSubmit(data: z.infer<typeof createChannelSchema>) {
-    await mutateAsync(data);
-    onSuccess();
-  }
-
   return (
-    <Form form={form} onSubmit={handleSubmit}>
+    <Form form={form} onSubmit={(data) => mutate(data)}>
+      {isError && <DangerAlert message={message} />}
       <div className="space-y-4">
         <Input label="Name" {...form.register("name")} />
         <Input
@@ -139,6 +152,16 @@ function CreateChannelDialog() {
   );
 }
 
+function ChannelListSkeleton() {
+  return (
+    <div className="animate-pulse space-y-2">
+      {new Array(5).fill(0).map((_, index) => (
+        <div key={index} className="h-7 w-full rounded-md bg-zinc-700/70"></div>
+      ))}
+    </div>
+  );
+}
+
 function ChannelsList() {
   const { isLoading, data: channels } = api.channel.getAll.useQuery();
 
@@ -148,21 +171,26 @@ function ChannelsList() {
         <strong className="text-lg">Channels</strong>
         <CreateChannelDialog />
       </div>
-      {isLoading && <p>Loading..</p>}
-      {!isLoading && !!channels?.length && (
-        <ul className="mt-2 space-y-1">
-          {channels.map((channel) => (
-            <li key={channel.id}>
-              <Link
-                className="block rounded-md p-1 px-2 hover:bg-zinc-600"
-                href={{ pathname: "/channel/[id]", query: { id: channel.id } }}
-              >
-                {channel.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="mt-2">
+        {isLoading && <ChannelListSkeleton />}
+        {!isLoading && !!channels?.length && (
+          <ul className="space-y-1">
+            {channels.map((channel) => (
+              <li key={channel.id}>
+                <Link
+                  className="block rounded-md p-1 px-2 hover:bg-zinc-600"
+                  href={{
+                    pathname: "/channel/[id]",
+                    query: { id: channel.id },
+                  }}
+                >
+                  {channel.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
