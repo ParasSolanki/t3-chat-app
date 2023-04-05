@@ -10,6 +10,10 @@ export const channelRouter = createTRPCRouter({
           some: { userId: ctx.session.user.id },
         },
       },
+      select: {
+        id: true,
+        name: true,
+      },
     });
   }),
   create: protectedProcedure

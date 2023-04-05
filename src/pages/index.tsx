@@ -12,6 +12,8 @@ import useZodForm from "~/hooks/use-zod-form";
 import { api } from "~/utils/api";
 import { createChannelSchema } from "~/common/validations/channel";
 import type { z } from "zod";
+import { useState } from "react";
+import Link from "next/link";
 
 function User() {
   const { data } = useSession();
@@ -75,7 +77,7 @@ function Header() {
   );
 }
 
-function CreateChannelForm() {
+function CreateChannelForm({ onSuccess }: { onSuccess: () => void }) {
   const utils = api.useContext();
   const { mutateAsync } = api.channel.create.useMutation({
     async onSuccess() {
@@ -92,6 +94,7 @@ function CreateChannelForm() {
 
   async function handleSubmit(data: z.infer<typeof createChannelSchema>) {
     await mutateAsync(data);
+    onSuccess();
   }
 
   return (
@@ -114,8 +117,10 @@ function CreateChannelForm() {
 }
 
 function CreateChannelDialog() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={(open) => setOpen(open)}>
       <Dialog.Trigger asChild>
         <button
           type="button"
@@ -128,7 +133,7 @@ function CreateChannelDialog() {
         <Dialog.Header className="text-2xl font-semibold">
           Create Channel
         </Dialog.Header>
-        <CreateChannelForm />
+        <CreateChannelForm onSuccess={() => setOpen(false)} />
       </Dialog.Content>
     </Dialog.Root>
   );
@@ -145,9 +150,16 @@ function ChannelsList() {
       </div>
       {isLoading && <p>Loading..</p>}
       {!isLoading && !!channels?.length && (
-        <ul>
+        <ul className="mt-2 space-y-1">
           {channels.map((channel) => (
-            <li key={channel.id}>{channel.name}</li>
+            <li key={channel.id}>
+              <Link
+                className="block rounded-md p-1 px-2 hover:bg-zinc-600"
+                href={{ pathname: "/channel/[id]", query: { id: channel.id } }}
+              >
+                {channel.name}
+              </Link>
+            </li>
           ))}
         </ul>
       )}
