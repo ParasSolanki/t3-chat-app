@@ -3,6 +3,7 @@ import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import Router from "next/router";
 import NProgress from "nprogress";
+import { Toaster } from "react-hot-toast";
 import { Inter } from "next/font/google";
 
 import { api } from "~/utils/api";
@@ -25,6 +26,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{ className: "!bg-zinc-800 !text-zinc-50 !shadow-md" }}
+      />
       <main className={`${inter.variable} font-inter`}>
         <Component {...pageProps} />
       </main>
