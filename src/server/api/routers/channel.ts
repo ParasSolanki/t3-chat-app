@@ -33,11 +33,21 @@ export const channelRouter = createTRPCRouter({
         data: {
           name: input.name,
           description: input.description,
-          createdById: ctx.session.user.id,
+          createdBy: {
+            connect: {
+              id: ctx.session.user.id,
+              username: ctx.session.user.username,
+            },
+          },
           members: {
             create: {
               role: "ADMIN",
-              userId: ctx.session.user.id,
+              user: {
+                connect: {
+                  id: ctx.session.user.id,
+                  username: ctx.session.user.username,
+                },
+              },
             },
           },
         },

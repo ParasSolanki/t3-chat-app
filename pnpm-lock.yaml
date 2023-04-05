@@ -27,7 +27,7 @@ specifiers:
   clsx: ^1.2.1
   eslint: ^8.34.0
   eslint-config-next: ^13.2.1
-  lucide-react: ^0.129.0
+  lucide-react: ^0.130.1
   next: ^13.2.1
   next-auth: ^4.19.0
   nprogress: ^0.2.0
@@ -61,7 +61,7 @@ dependencies:
   '@types/nprogress': 0.2.0
   bcryptjs: 2.4.3
   clsx: 1.2.1
-  lucide-react: 0.129.0_react@18.2.0
+  lucide-react: 0.130.1_react@18.2.0
   next: 13.2.4_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.20.1_ld2jel3hspngo3u5lti2kgl2sq
   nprogress: 0.2.0
@@ -2350,8 +2350,8 @@ packages:
     dependencies:
       yallist: 4.0.0
 
-  /lucide-react/0.129.0_react@18.2.0:
-    resolution: {integrity: sha512-kGEZ+pOk9FLKsCr4luL4HYqr23lQdVbmN+3cgTj0Ye6s95FED3CX/DNzB3o8/TimgNmKKw+iq+g3mnTbtS7/ew==}
+  /lucide-react/0.130.1_react@18.2.0:
+    resolution: {integrity: sha512-Fyyyd+ZGlZj/N8d/u9uoqFbRATI18WhynzVTjaeEqfVvsea8pYTSwBMfCg264TB2c5z9aiNAeNy67x8BiFyqXQ==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:

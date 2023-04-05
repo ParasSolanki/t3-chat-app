@@ -5,8 +5,13 @@ import { signOut, useSession } from "next-auth/react";
 import { LogOut, User as UserIcon, PlusIcon } from "lucide-react";
 import * as DropdownMenu from "~/components/ui/DropdownMenu";
 import * as Dialog from "~/components/ui/Dialog";
+import Form from "~/components/forms/Form";
+import Input from "~/components/forms/Input";
+import SubmitButton from "~/components/forms/SubmitButton";
+import useZodForm from "~/hooks/use-zod-form";
 import { api } from "~/utils/api";
-import { DialogContent } from "@radix-ui/react-dialog";
+import { createChannelSchema } from "~/common/validations/channel";
+import type { z } from "zod";
 
 function User() {
   const { data } = useSession();
@@ -70,16 +75,60 @@ function Header() {
   );
 }
 
+function CreateChannelForm() {
+  const utils = api.useContext();
+  const { mutateAsync } = api.channel.create.useMutation({
+    async onSuccess() {
+      await utils.channel.getAll.invalidate();
+    },
+  });
+  const form = useZodForm({
+    schema: createChannelSchema,
+    defaultValues: {
+      name: "",
+      description: "",
+    },
+  });
+
+  async function handleSubmit(data: z.infer<typeof createChannelSchema>) {
+    await mutateAsync(data);
+  }
+
+  return (
+    <Form form={form} onSubmit={handleSubmit}>
+      <div className="space-y-4">
+        <Input label="Name" {...form.register("name")} />
+        <Input
+          label="Description (optional)"
+          {...form.register("description")}
+        />
+
+        <div className="flex justify-end">
+          <SubmitButton disabled={form.formState.isSubmitting}>
+            Save
+          </SubmitButton>
+        </div>
+      </div>
+    </Form>
+  );
+}
+
 function CreateChannelDialog() {
   return (
     <Dialog.Root>
-      <Dialog.Trigger className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-700 shadow-md outline-none hover:bg-zinc-600 focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-zinc-800">
-        <PlusIcon className="h-4 w-4" />
+      <Dialog.Trigger asChild>
+        <button
+          type="button"
+          className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-700 shadow-md outline-none hover:bg-zinc-600 focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-zinc-800"
+        >
+          <PlusIcon className="h-4 w-4" size={12} />
+        </button>
       </Dialog.Trigger>
       <Dialog.Content>
         <Dialog.Header className="text-2xl font-semibold">
           Create Channel
         </Dialog.Header>
+        <CreateChannelForm />
       </Dialog.Content>
     </Dialog.Root>
   );

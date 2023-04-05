@@ -1,5 +1,4 @@
-import { type ComponentProps, forwardRef } from "react";
-import clsx from "clsx";
+import { type ComponentProps, forwardRef, useId } from "react";
 import { useFormContext } from "react-hook-form";
 import { cn } from "~/lib/utils";
 
@@ -9,15 +8,20 @@ interface Props extends ComponentProps<"input"> {
 }
 
 const Input = forwardRef<HTMLInputElement, Props>(
-  ({ className, ...props }, ref) => {
+  ({ className, label, ...props }, ref) => {
+    const id = useId();
     const form = useFormContext();
     const state = form.getFieldState(props.name, form.formState);
 
+    console.log(form);
     return (
       <div>
-        <label htmlFor={props.name}>{props.label}</label>
+        <label htmlFor={id} className="font-medium text-zinc-300">
+          {label}
+        </label>
         <input
           {...props}
+          id={id}
           ref={ref}
           aria-invalid={state.error ? true : false}
           className={cn(

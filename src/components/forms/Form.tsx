@@ -23,7 +23,7 @@ const Form = <T extends FieldValues>({
 }: Props<T>) => {
   return (
     <FormProvider {...form}>
-      <form onSubmit={void form.handleSubmit(onSubmit)} {...props}>
+      <form onSubmit={form.handleSubmit(onSubmit)} {...props}>
         <fieldset disabled={form.formState.isSubmitting}>{children}</fieldset>
       </form>
     </FormProvider>

@@ -7,6 +7,6 @@ export const createChannelSchema = z.object({
     .max(30, "Channel name must contain at most 30 character(s)"),
   description: z
     .string()
-    .max(200, "Description must contain at most 200 character(s)")
+    .max(100, "Description must contain at most 100 character(s)")
     .optional(),
 });
