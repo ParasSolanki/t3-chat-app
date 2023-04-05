@@ -13,6 +13,7 @@ import useZodForm from "~/hooks/use-zod-form";
 import { api } from "~/utils/api";
 import { createChannelSchema } from "~/common/validations/channel";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 function User() {
   const { data } = useSession();
@@ -97,6 +98,7 @@ function CreateChannelForm(props: { onSuccess: () => void }) {
       setMessage(message);
     },
     async onSuccess() {
+      toast.success("Channel created");
       props.onSuccess();
       await utils.channel.getAll.invalidate();
     },
@@ -178,7 +180,7 @@ function ChannelsList() {
             {channels.map((channel) => (
               <li key={channel.id}>
                 <Link
-                  className="block rounded-md p-1 px-2 hover:bg-zinc-600"
+                  className="block rounded-md p-1 px-2 text-sm hover:bg-zinc-700"
                   href={{
                     pathname: "/channel/[id]",
                     query: { id: channel.id },
