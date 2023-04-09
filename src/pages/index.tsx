@@ -94,8 +94,11 @@ function CreateChannelForm(props: { onSuccess: () => void }) {
   const utils = api.useContext();
   const [message, setMessage] = useState("");
   const { mutate, isError } = api.channel.create.useMutation({
-    onError({ message }) {
-      setMessage(message);
+    onError({ message, data }) {
+      let text = "Something went wrong";
+      if (data?.code === "CONFLICT") text = message;
+
+      setMessage(text);
     },
     async onSuccess() {
       toast.success("Channel created");
