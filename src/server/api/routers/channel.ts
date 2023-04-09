@@ -21,8 +21,10 @@ export const channelRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       const uniqueChannel = await ctx.prisma.channel.findUnique({
         where: {
-          name: input.name,
-          createdById: ctx.session.user.id,
+          name_createdById: {
+            name: input.name,
+            createdById: ctx.session.user.id,
+          },
         },
       });
 
@@ -40,7 +42,6 @@ export const channelRouter = createTRPCRouter({
           createdBy: {
             connect: {
               id: ctx.session.user.id,
-              username: ctx.session.user.username,
             },
           },
           members: {
@@ -49,7 +50,6 @@ export const channelRouter = createTRPCRouter({
               user: {
                 connect: {
                   id: ctx.session.user.id,
-                  username: ctx.session.user.username,
                 },
               },
             },
