@@ -1,44 +1,37 @@
-import { type ComponentProps, forwardRef, useId } from "react";
-import { useFormContext } from "react-hook-form";
+import { type ComponentProps, forwardRef } from "react";
+import FormField, {
+  useFormField,
+  type UseFormFieldProps,
+} from "~/components/forms/FormField";
 import { cn } from "~/lib/utils";
 
-interface Props extends ComponentProps<"input"> {
+interface Props extends UseFormFieldProps, ComponentProps<"input"> {
   name: string;
-  label: string;
+  appendicon?: JSX.Element;
 }
 
-const Input = forwardRef<HTMLInputElement, Props>(
-  ({ className, label, ...props }, ref) => {
-    const id = useId();
-    const form = useFormContext();
-    const state = form.getFieldState(props.name, form.formState);
+const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
+  const { formFieldProps, childProps } = useFormField(props);
+  const { id, className, ...otherProps } = childProps;
 
-    return (
-      <div>
-        <label htmlFor={id} className="font-medium text-zinc-300">
-          {label}
-        </label>
-        <input
-          {...props}
-          id={id}
-          ref={ref}
-          aria-invalid={state.error ? true : false}
-          className={cn(
-            "mt-1 block w-full rounded-md border-2 border-neutral-700 bg-neutral-900 px-3 py-2 text-base text-slate-200 shadow-sm focus:bg-neutral-800/90 focus:outline-none focus:ring-0",
-            {
-              "focus-within:border-red-500": state.error,
-              "focus-within:border-orange-400": !state.error,
-            },
-            className
-          )}
-        />
-        {state.error ? (
-          <small className="text-red-500">{state.error.message}</small>
-        ) : null}
-      </div>
-    );
-  }
-);
+  return (
+    <FormField
+      {...formFieldProps}
+      renderItem={(state) => (
+        <>
+          <input
+            id={id}
+            ref={ref}
+            {...otherProps}
+            aria-invalid={state.invalid}
+            className={cn("w-full border-none bg-inherit px-3 py-2", className)}
+          />
+          {props?.appendicon && props.appendicon}
+        </>
+      )}
+    ></FormField>
+  );
+});
 Input.displayName = "InputElement";
 
 export default Input;

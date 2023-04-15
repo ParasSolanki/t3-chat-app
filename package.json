@@ -24,6 +24,7 @@
     "@trpc/server": "^10.9.0",
     "@types/nprogress": "^0.2.0",
     "bcryptjs": "^2.4.3",
+    "class-variance-authority": "^0.5.2",
     "clsx": "^1.2.1",
     "lucide-react": "^0.130.1",
     "next": "^13.2.1",
