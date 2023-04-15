@@ -69,7 +69,7 @@ function SigninForm() {
             id="email"
             type="email"
             className={clsx(
-              "mt-1 block w-full rounded-md border-2 border-neutral-700 bg-neutral-900 py-2 px-3 text-base text-slate-200 shadow-sm focus:bg-neutral-800/90 focus:outline-none focus:ring-0",
+              "mt-1 block w-full rounded-md border-2 border-neutral-700 bg-neutral-900 px-3 py-2 text-base text-slate-200 shadow-sm focus:bg-neutral-800/90 focus:outline-none focus:ring-0",
               {
                 "focus-within:border-red-500": errors?.email?.message,
                 "focus-within:border-orange-400": !errors?.email,
@@ -102,7 +102,7 @@ function SigninForm() {
             />
             <button
               type="button"
-              className="-z-1 absolute top-1/2 right-0 flex h-full w-9 -translate-y-1/2 items-center justify-center px-2 hover:bg-neutral-700 focus:bg-neutral-700 focus:outline-none"
+              className="-z-1 absolute right-0 top-1/2 flex h-full w-9 -translate-y-1/2 items-center justify-center px-2 hover:bg-neutral-700 focus:bg-neutral-700 focus:outline-none"
               onClick={() => setShowPassword((prev) => !prev)}
             >
               {showPassword ? (
@@ -121,7 +121,7 @@ function SigninForm() {
           disabled={isSubmitting}
           className="highlight-white/20 relative block w-full rounded-lg bg-orange-400 px-4 py-2 text-lg font-semibold text-white shadow-md hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:bg-orange-500/60 disabled:text-white/60"
         >
-          <span className="absolute top-1/2 left-0 flex h-full w-10 -translate-y-1/2 items-center justify-center">
+          <span className="absolute left-0 top-1/2 flex h-full w-10 -translate-y-1/2 items-center justify-center">
             <LockClosedIcon className="h-5 w-5 opacity-40" />
           </span>
           Signin
