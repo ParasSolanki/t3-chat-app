@@ -2,7 +2,7 @@
 
 A Chat application made with T3 Stack.
 
-## Tods
+## Todos
 
 - [x] create channel and show channels in sidebar list
 - [ ] add chat box
