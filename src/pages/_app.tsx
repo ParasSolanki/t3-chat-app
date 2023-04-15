@@ -4,16 +4,25 @@ import { SessionProvider } from "next-auth/react";
 import Router from "next/router";
 import NProgress from "nprogress";
 import { Toaster } from "react-hot-toast";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import "~/styles/nprogress.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+const inter = localFont({
+  src: [
+    {
+      path: "../assets/fonts/Inter-italic.var.woff2",
+      style: "italic",
+    },
+    {
+      path: "../assets/fonts/Inter-roman.var.woff2",
+      style: "normal",
+    },
+  ],
+  preload: true,
 });
 
 Router.events.on("routeChangeStart", () => NProgress.start());
@@ -31,7 +40,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         reverseOrder={false}
         toastOptions={{ className: "!bg-zinc-800 !text-zinc-50 !shadow-md" }}
       />
-      <main className={`${inter.variable} font-inter`}>
+      <main className={`${inter.className}`}>
         <Component {...pageProps} />
       </main>
     </SessionProvider>
