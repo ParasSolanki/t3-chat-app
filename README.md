@@ -8,3 +8,6 @@ A Chat application made with T3 Stack.
 - [ ] add chat box
 - [ ] send messages in chat
 - [ ] display channel messages
+- [ ] user avatars
+- [ ] send user to user message
+- [ ] global search
